@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="513.0" prefWidth="689.0" stylesheets="@theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane dividerPositions="0.2576419213973799" layoutX="24.0" layoutY="49.0" prefHeight="513.0" prefWidth="689.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <ListView fx:id="listView" layoutX="-6.0" layoutY="56.0" maxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <SplitPane dividerPositions="0.888015717092338" layoutX="73.0" layoutY="112.0" orientation="VERTICAL" prefHeight="511.0" prefWidth="506.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="454.0" prefWidth="506.0">
+                           <children>
+                              <TextArea fx:id="textArea" layoutX="45.0" layoutY="60.0" prefHeight="448.0" prefWidth="504.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children></AnchorPane>
+                      <AnchorPane maxHeight="153.0" minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="504.0">
+                           <children>
+                              <MenuButton layoutX="345.0" layoutY="13.0" mnemonicParsing="false" text="Size">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="small" />
+                                  <MenuItem mnemonicParsing="false" text="medium" />
+                                    <MenuItem mnemonicParsing="false" text="large" />
+                                </items>
+                              </MenuButton>
+                              <Button layoutX="422.0" layoutY="10.0" mnemonicParsing="false" text="Wrap" />
+                              <ColorPicker fx:id="fontColor" layoutX="141.0" layoutY="14.0" />
+                              <ColorPicker fx:id="background" layoutX="21.0" layoutY="12.0" />
+                              <MenuButton layoutX="252.0" layoutY="14.0" mnemonicParsing="false" text="Space">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="1.0" />
+                                  <MenuItem mnemonicParsing="false" text="1.5" />
+                                </items>
+                              </MenuButton>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
