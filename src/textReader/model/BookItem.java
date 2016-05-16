@@ -1,7 +1,6 @@
 package textReader.model;
 
 import java.io.File;
-
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -10,9 +9,23 @@ import org.apache.commons.io.FilenameUtils;
  *
  */
 public class BookItem {
-	private final File file;
+	private File file;
+	private int bookIndex;
 	
-	public BookItem(File file){
+	public void setBookIndex(int bookIndex){
+		this.bookIndex = bookIndex;
+	}
+	
+	public int getBookIndex(){
+		return this.bookIndex;
+	}
+	
+	// get the book
+	public File getFile(){
+		return this.file;
+	}
+	
+	public void setFile(File file){
 		this.file = file;
 	}
 	
