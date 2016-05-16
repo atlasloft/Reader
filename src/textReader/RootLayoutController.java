@@ -23,6 +23,9 @@ public class RootLayoutController {
 	@FXML
 	private MenuItem openMenu;
 	
+	@FXML
+	private MenuItem deleteMenu;
+	
 	private Stage stage;
 	private MainApp mainApp;
 
@@ -34,6 +37,29 @@ public class RootLayoutController {
 		
 		this.stage = mainApp.getPrimaryStage();
 		
+		openMenuAction(openMenu);
+		
+		deleteMenuAction(deleteMenu);
+		
+	}
+	
+	private void deleteMenuAction(MenuItem deleteMenu){
+		deleteMenu.setOnAction(new EventHandler<ActionEvent>() {
+			
+			// select a text file and print it
+		    @Override 
+		    public void handle(ActionEvent e) {
+				mainApp.deleteFile();
+		    }
+		});
+	}
+	
+	/**
+	 * add an action of openMenu
+	 * click to select a text file
+	 * @param openMenu
+	 */
+	private void openMenuAction(MenuItem openMenu){
 		openMenu.setOnAction(new EventHandler<ActionEvent>() {
 			
 			// select a text file and print it
@@ -42,11 +68,9 @@ public class RootLayoutController {
 		    	File textFile = FileUtils.getFile(stage);
 				if(textFile != null){
 					mainApp.loadFiles(textFile);
-					//mainApp.saveBookDataToFile(new File("model/books.xml"));
 				}	
 		    }
 		});
-		
 	}
 
 

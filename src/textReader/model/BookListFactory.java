@@ -13,27 +13,28 @@ public interface BookListFactory {
 	 * add a new book into book list
 	 * @param newBookComponent
 	 */
-	default public void add(BookItem newBookComponent) {	
+	default public void add(BookItem newBookComponent,ObservableList<BookItem> books) {	
 		
 		throw new UnsupportedOperationException();
 		
 	}
 	
 	// remove a book in book list
-	default	public void remove(int componentIndex) {
+	default	public void remove(int componentIndex,ObservableList<BookItem> books) {
 			
 			throw new UnsupportedOperationException();
 			
 	}
 	
 	// get components
-	default public BookItem getComponent(int componentIndex) {
+	default public BookItem getComponent(int componentIndex,ObservableList<BookItem> books) {
 			
 		throw new UnsupportedOperationException();
 			
 	}
 
-	ObservableList<BookItem> getBookList();
+	int totalNumberOfBooks(ObservableList<BookItem> books);
+
 	
 	
 	

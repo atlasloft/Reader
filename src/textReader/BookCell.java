@@ -15,6 +15,8 @@ public class BookCell extends ListCell<BookItem> {
 		
 	        if (item != null) {
 	        	setText(item.getFileNameStringWithoutEx());
-	        } 
+	        } else {
+	        	   setText("");   // <== clear the now empty cell.
+	        }
      }
 }

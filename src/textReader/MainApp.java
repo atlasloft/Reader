@@ -3,18 +3,12 @@ package textReader;
 import java.io.File;
 import java.io.IOException;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import textReader.model.BookList;
-import textReader.model.BookListWrapper;
 
 /**
  * main entrance of this application
@@ -113,6 +107,10 @@ public class MainApp extends Application {
 		this.controllerReader.printTextInTextArea(textFile);
 		this.controllerReader.addListViewItem(textFile);
 		
+	}
+	
+	public void deleteFile(){
+		this.controllerReader.deleteFile();
 	}
 	
 	

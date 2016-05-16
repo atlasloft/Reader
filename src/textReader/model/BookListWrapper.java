@@ -12,7 +12,7 @@ public class BookListWrapper {
 
     @XmlElement(name = "book")
     public List<BookItem> getBooks() {
-        return this.books;
+        return books;
     }
 
     public void setBooks(List<BookItem> books) {

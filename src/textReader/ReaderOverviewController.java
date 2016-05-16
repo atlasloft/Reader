@@ -7,12 +7,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import textReader.model.BookItem;
@@ -26,14 +28,25 @@ public class ReaderOverviewController {
 	private TextArea textArea;
 	
 	@FXML
-	private ListView<BookItem> listView;
-	
-	@FXML
 	private ColorPicker fontColor;
 	
 	@FXML
 	private ColorPicker background;
 		
+	@FXML
+	private ListView<BookItem> listView;
+	
+	@FXML
+	private MenuItem smallFont;
+	
+	@FXML
+	private MenuItem mediumFont;
+	
+	@FXML
+	private MenuItem largeFont;
+		
+	ObservableList<BookItem> books = FXCollections.observableArrayList();;
+	
 	private BookList bookList = new BookList();
 	
 	//这两个的默认值问题需要修改！！！
@@ -42,12 +55,70 @@ public class ReaderOverviewController {
 	
 	private String css = this.getClass().getResource("view/textArea.css").toExternalForm();
 	
-	public void addListViewItem(File file){
-		BookItem newBookItem = new BookItem(file);
-		bookList.add(newBookItem);
-		listView.setItems(bookList.getBookList());
+	public void initialize() {
 		
-		saveBookDataToFile(new File("model/books.xml"));
+		textArea.getStylesheets().add(css);
+		
+		loadBookDataFromFile(new File("src/textReader/model/books.xml"));
+		
+		// add action listener of color picker
+		fontColorPickerAction(fontColor);
+		backgroundColorPickerAction(background);
+		
+		// add action listener of font size
+		fontAction(smallFont, mediumFont, largeFont);
+		
+		listView.setItems(books);
+		listView.setCellFactory((ListView<BookItem> bookItem) -> new BookCell());
+		
+	}
+	
+	/**
+	 * add action listener of font size
+	 * @param smallFont
+	 * @param mediumFont
+	 * @param largeItem
+	 */
+	public void fontAction(MenuItem smallFont, MenuItem mediumFont, MenuItem largeItem){
+		smallFontAction(smallFont);
+		mediumFontAction(mediumFont);
+		largeFontAction(largeFont);
+	}
+	
+	public void smallFontAction(MenuItem smallFont){
+		
+	}
+	
+	
+	/**
+	 * delete a chosen book in the book list
+	 */
+	public void deleteFile(){
+		BookItem bookItem = listView.getSelectionModel().getSelectedItem();
+		if(bookItem!= null){			
+			
+			listView.getSelectionModel().clearSelection(); 
+			bookList.remove(bookItem.getBookIndex(), books);
+			
+			saveBookDataToFile(new File("src/textReader/model/books.xml"));
+			
+		}
+	}
+	
+	/**
+	 * add a new book into the book list
+	 * @param file
+	 */
+	// 需要不能打开相同的file, 以后添加实现
+	public void addListViewItem(File file){
+		BookItem newBookItem = new BookItem();
+		newBookItem.setFile(file);
+		newBookItem.setBookIndex(bookList.totalNumberOfBooks(books));
+		
+		bookList.add(newBookItem, books);
+		//listView.setItems(books);
+		
+		saveBookDataToFile(new File("src/textReader/model/books.xml"));
 		
 	}
 	
@@ -65,21 +136,11 @@ public class ReaderOverviewController {
 			e1.printStackTrace();
 		}
 	}
-		
-	public void initialize() {
-		
-		listView.setItems(bookList.getBookList());
-		listView.setCellFactory((ListView<BookItem> bookItem) -> new BookCell());
-		
-		textArea.getStylesheets().add(css);
-		
-		loadBookDataFromFile(new File("model/books.xml"));
-		
-		fontColorPickerAction(fontColor);
-		backgroundColorPickerAction(background);
-		
-	}
 	
+	/**
+	 * change the background of text area
+	 * @param background
+	 */
 	private void backgroundColorPickerAction(ColorPicker background){
 		background.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -140,7 +201,7 @@ public class ReaderOverviewController {
 	}
 
 	/**
-	 * Loads book data from the specified file. The current person data will
+	 * Loads book data from the "src/textReader/model/books.xml". The current book data will
 	 * be replaced.
 	 * 
 	 * @param file
@@ -154,10 +215,7 @@ public class ReaderOverviewController {
 	        // Reading XML from the file and unmarshalling.
 	        BookListWrapper wrapper = (BookListWrapper) um.unmarshal(file);
 	        
-	        this.bookList.addAll(wrapper.getBooks());
-
-	        // Save the file path to the registry.
-	        //setPersonFilePath(file);
+	        bookList.addAll(wrapper.getBooks(), books);
 
 	    } catch (Exception e) { // catches ANY exception
 //	        Dialogs.create()
@@ -169,7 +227,7 @@ public class ReaderOverviewController {
 	}
 	
 	/**
-	 * Saves the current book data to the specified file.
+	 * Saves the current book data to the specified file: src/textReader/model/books.xml.
 	 * 
 	 * @param file
 	 */
@@ -179,28 +237,20 @@ public class ReaderOverviewController {
 	                .newInstance(BookListWrapper.class);
 	        Marshaller m = context.createMarshaller();
 	        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-	        //test......
-	        //System.out.println(this.bookList.getComponent(0).getFileName());
 	            
 	        // Wrapping our book data.
 	        BookListWrapper wrapper = new BookListWrapper();
-	        wrapper.setBooks(this.bookList.getBookList());
-
-	        System.out.println(wrapper.getBooks().get(0).getFileName());
-	        
-	        // Marshalling and saving XML to the file.
-	        m.marshal(wrapper, file);
+	        wrapper.setBooks(books);
 	        
 	        //test output
 	    	m.marshal(wrapper, System.out);
+	    	
+	    	// Marshalling and saving XML to the file.
+	        m.marshal(wrapper, file);
+	        
 
-	        // Save the file path to the registry.
-	        //setPersonFilePath(file);
-	    } catch (Exception e) { // catches ANY exception
-//	        Dialogs.create().title("Error")
-//	                .masthead("Could not save data to file:\n" + file.getPath())
-//	                .showException(e);
+	    } catch (Exception e) {
+	    	e.printStackTrace();
 	    }
 	}
 	
