@@ -12,10 +12,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import textReader.model.BookItem;
 import textReader.model.BookList;
@@ -49,9 +52,10 @@ public class ReaderOverviewController {
 	
 	private BookList bookList = new BookList();
 	
-	//这两个的默认值问题需要修改！！！
-	private String fontColorString;
-	private String backgroundString;
+	//这三个的默认值问题需要修改！！！
+	private String fontColorString = "white";
+	private String backgroundString = "black";
+	private int fontSize = 12;
 	
 	private String css = this.getClass().getResource("view/textArea.css").toExternalForm();
 	
@@ -68,9 +72,24 @@ public class ReaderOverviewController {
 		// add action listener of font size
 		fontAction(smallFont, mediumFont, largeFont);
 		
+		// add action listener of listView
+		listViewAction(listView);
+		
+		
 		listView.setItems(books);
 		listView.setCellFactory((ListView<BookItem> bookItem) -> new BookCell());
 		
+	}
+	
+	public void listViewAction(ListView<BookItem> listView){
+	    listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				BookItem bookItem = listView.getSelectionModel().getSelectedItem();
+				printTextInTextArea(bookItem.getFile());
+			}
+	    });
 	}
 	
 	/**
@@ -85,8 +104,58 @@ public class ReaderOverviewController {
 		largeFontAction(largeFont);
 	}
 	
+	/**
+	 * set large size of font in text Area
+	 * @param largeFont
+	 */
+	public void largeFontAction(MenuItem smallFont){
+		smallFont.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				fontSize = 16;
+				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
+						"-fx-text-fill: " + fontColorString + ";" +
+						"-fx-font-size: 16pt;");
+	
+			}
+	    });
+	}
+	
+	/**
+	 * set medium size of font in text Area
+	 * @param mediumFont
+	 */
+	public void mediumFontAction(MenuItem smallFont){
+		smallFont.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				fontSize = 14;
+				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
+						"-fx-text-fill: " + fontColorString + ";" +
+						"-fx-font-size: 14pt;");
+	
+			}
+	    });
+	}
+	
+	/**
+	 * set small size of font in text Area
+	 * @param smallFont
+	 */
 	public void smallFontAction(MenuItem smallFont){
-		
+		smallFont.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				fontSize  = 12;
+				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
+						"-fx-text-fill: " + fontColorString + ";" +
+						"-fx-font-size: 12pt;");
+	
+			}
+	    });
 	}
 	
 	
@@ -154,7 +223,8 @@ public class ReaderOverviewController {
 				FileUtils.operateTextAreaCSSwithBackground(backgroundString);
 				
 				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-						"-fx-text-fill: " + fontColorString + ";" );
+						"-fx-text-fill: " + fontColorString + ";" +
+						"-fx-font-size: " + fontSize + ";");
 	
 			}
 	    });
@@ -218,10 +288,6 @@ public class ReaderOverviewController {
 	        bookList.addAll(wrapper.getBooks(), books);
 
 	    } catch (Exception e) { // catches ANY exception
-//	        Dialogs.create()
-//	                .title("Error")
-//	                .masthead("Could not load data from file:\n" + file.getPath())
-//	                .showException(e);
 	    	
 	    }
 	}

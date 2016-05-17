@@ -19,7 +19,7 @@ public class MainApp extends Application {
 	
     private Stage primaryStage;
     private BorderPane rootLayout;
- //   private BookList bookList = new BookList();
+    
     private ReaderOverviewController controllerReader;
     
     @Override
@@ -27,8 +27,6 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Reader");
 
-       // loadBookDataFromFile(new File("model/books.xml")); 
-        
         initRootLayout();
 
         showReaderOverview();

@@ -23,7 +23,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="aboutReader" mnemonicParsing="false" text="About Reader" />
+                  <MenuItem fx:id="author" mnemonicParsing="false" text="About author" />
             </items>
           </Menu>
         </menus>
