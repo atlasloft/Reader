@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <books>
     <book>
-        <bookIndex>1</bookIndex>
+        <bookIndex>0</bookIndex>
         <file>/Users/bird/Documents/text.txt</file>
-    </book>
-    <book>
-        <bookIndex>2</bookIndex>
-        <file>/Users/bird/Documents/text.txt</file>
-    </book>
-    <book>
-        <bookIndex>2</bookIndex>
-        <file>/Users/bird/Documents/我的文档/英语原文小说Lolita.txt</file>
     </book>
 </books>

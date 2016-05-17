@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status>
+    <background>rgb(255,230,204)</background>
+    <fontColor>rgb(51,77,179)</fontColor>
+    <fontSize>14</fontSize>
+    <fontSpace>1</fontSpace>
+    <wrapFlag>false</wrapFlag>
+</Status>

@@ -3,14 +3,18 @@ package textReader;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
@@ -18,7 +22,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -26,6 +33,7 @@ import javafx.stage.StageStyle;
 import textReader.model.BookItem;
 import textReader.model.BookList;
 import textReader.model.BookListWrapper;
+import textReader.model.BookStatus;
 import tools.FileUtils;
 
 public class ReaderOverviewController {
@@ -70,24 +78,17 @@ public class ReaderOverviewController {
 	
 	private BookList bookList = new BookList();
 	
-	private boolean wrapFlag = true;
-	
 	private File file ;
 	
-	//这四个的默认值问题需要修改！！！
-	//删除文件有问题
-	private String fontColorString = "white";
-	private String backgroundString = "black";
-	private int fontSize = 12;
-	//private int fontSpace = 1;
+	BookStatus status;
 	
-	private String css = this.getClass().getResource("view/textArea.css").toExternalForm();
+	//private String css = this.getClass().getResource("view/textArea.css").toExternalForm();
 	
 	public void initialize() {
 		
-		textArea.getStylesheets().add(css);
-		
 		loadBookDataFromFile(new File("src/textReader/model/books.xml"));
+		loadBookStatusFromFile(new File("src/textReader/model/status.xml"));
+		setTextAreaStyle();
 		
 		Actions();	
 		
@@ -157,8 +158,9 @@ public class ReaderOverviewController {
 
 			@Override
 			public void handle(ActionEvent event) {
-				textArea.setWrapText(wrapFlag);
-				wrapFlag = !wrapFlag;
+				textArea.setWrapText(status.getWrapFlag());
+				status.setWrapFlag(!status.getWrapFlag());
+				saveBookStatusToFile(new File("src/textReader/model/status.xml"));
 			}
 	    });
 	}
@@ -240,10 +242,9 @@ public class ReaderOverviewController {
 
 			@Override
 			public void handle(ActionEvent event) {
-				fontSize = 16;
-				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-						"-fx-text-fill: " + fontColorString + ";" +
-						"-fx-font-size: 16pt;");
+				status.setFontSize(16);
+				setTextAreaStyle();
+				saveBookStatusToFile(new File("src/textReader/model/status.xml"));
 	
 			}
 	    });
@@ -258,10 +259,9 @@ public class ReaderOverviewController {
 
 			@Override
 			public void handle(ActionEvent event) {
-				fontSize = 14;
-				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-						"-fx-text-fill: " + fontColorString + ";" +
-						"-fx-font-size: 14pt;");
+				status.setFontSize(14);
+				setTextAreaStyle();
+				saveBookStatusToFile(new File("src/textReader/model/status.xml"));
 	
 			}
 	    });
@@ -276,10 +276,9 @@ public class ReaderOverviewController {
 
 			@Override
 			public void handle(ActionEvent event) {
-				fontSize  = 12;
-				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-						"-fx-text-fill: " + fontColorString + ";" +
-						"-fx-font-size: 12pt;");
+				status.setFontSize(12);
+				setTextAreaStyle();
+				saveBookStatusToFile(new File("src/textReader/model/status.xml"));
 	
 			}
 	    });
@@ -345,17 +344,18 @@ public class ReaderOverviewController {
 			public void handle(ActionEvent event) {
 				Color color = background.getValue();
 				
-				backgroundString = toRgbString(color);
-				
-				//save the change in CSS
-				FileUtils.operateTextAreaCSSwithBackground(backgroundString);
-				
-				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-						"-fx-text-fill: " + fontColorString + ";" +
-						"-fx-font-size: " + fontSize + ";");
+				status.setBackground(toRgbString(color));
+				setTextAreaStyle();
+				saveBookStatusToFile(new File("src/textReader/model/status.xml"));
 	
 			}
 	    });
+	}
+	
+	private void setTextAreaStyle(){
+		textArea.setStyle("-fx-control-inner-background: " + status.getBackground()  + ";"+
+				"-fx-text-fill: " + status.getFontColor() + ";" +
+				"-fx-font-size: "+ status.getFontSize()+"pt;");
 	}
 	
 	/**
@@ -369,13 +369,10 @@ public class ReaderOverviewController {
 			public void handle(ActionEvent event) {
 				Color color = fontColor.getValue();
 				
-				fontColorString = toRgbString(color);
+				status.setFontColor(toRgbString(color));
 				
-				// save the change in CSS
-				FileUtils.operateTextAreaCSSwithFontColor(fontColorString);
-				
-		        textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-						"-fx-text-fill: " + fontColorString + ";");
+				setTextAreaStyle();
+				saveBookStatusToFile(new File("src/textReader/model/status.xml"));
 			}
 	    });
 
@@ -398,7 +395,52 @@ public class ReaderOverviewController {
 		return (int) (d * 255);
 	}
 	
+	/**
+	 * load book status from xml file
+	 * @param file
+	 */
+	public void loadBookStatusFromFile(File file){
+        JAXBContext context;
+		try {
+			context = JAXBContext
+			        .newInstance(BookStatus.class);
+	        Unmarshaller um = context.createUnmarshaller();
+	        
+	        // Reading XML from the file and unmarshalling.
+	        status = (BookStatus) um.unmarshal(file);
+	        System.out.println(status);
+	        
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * save book status to file
+	 * @param file
+	 */
+	public void saveBookStatusToFile(File file) {
+	    try {
+	        JAXBContext context = JAXBContext
+	                .newInstance(BookStatus.class);
+	        Marshaller m = context.createMarshaller();
+	        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	    	
+	    	// Marshalling and saving XML to the file.
+	        m.marshal(status, file);
+	        
+	        //test output
+	    	m.marshal(status, System.out);
+	        
 
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+	}
+
+	
+	
 	/**
 	 * Loads book data from the "src/textReader/model/books.xml". The current book data will
 	 * be replaced.
@@ -438,7 +480,7 @@ public class ReaderOverviewController {
 	        wrapper.setBooks(books);
 	        
 	        //test output
-	    	m.marshal(wrapper, System.out);
+	    	//m.marshal(wrapper, System.out);
 	    	
 	    	// Marshalling and saving XML to the file.
 	        m.marshal(wrapper, file);
