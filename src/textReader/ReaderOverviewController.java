@@ -2,7 +2,6 @@ package textReader;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -12,14 +11,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import textReader.model.BookItem;
 import textReader.model.BookList;
 import textReader.model.BookListWrapper;
@@ -47,15 +46,34 @@ public class ReaderOverviewController {
 	
 	@FXML
 	private MenuItem largeFont;
+	
+	@FXML
+	private MenuItem oneSpace;
+	
+	@FXML
+	private MenuItem oneFiveSpace;
+	
+	@FXML
+	private Button wrap;
+	
+	@FXML
+	private MenuItem fontTimes;
+	
+	@FXML
+	private MenuItem fontArial;
 		
 	ObservableList<BookItem> books = FXCollections.observableArrayList();;
 	
 	private BookList bookList = new BookList();
 	
-	//这三个的默认值问题需要修改！！！
+	private boolean wrapFlag = true;
+	
+	//这四个的默认值问题需要修改！！！
+	//删除文件有问题
 	private String fontColorString = "white";
 	private String backgroundString = "black";
 	private int fontSize = 12;
+	//private int fontSpace = 1;
 	
 	private String css = this.getClass().getResource("view/textArea.css").toExternalForm();
 	
@@ -65,22 +83,114 @@ public class ReaderOverviewController {
 		
 		loadBookDataFromFile(new File("src/textReader/model/books.xml"));
 		
-		// add action listener of color picker
-		fontColorPickerAction(fontColor);
-		backgroundColorPickerAction(background);
-		
-		// add action listener of font size
-		fontAction(smallFont, mediumFont, largeFont);
-		
-		// add action listener of listView
-		listViewAction(listView);
-		
+		Actions();	
 		
 		listView.setItems(books);
 		listView.setCellFactory((ListView<BookItem> bookItem) -> new BookCell());
 		
 	}
 	
+	/**
+	 * the actions of all components
+	 */
+	public void Actions(){
+		
+		// add action listener of color picker
+		fontColorPickerAction(fontColor);
+		backgroundColorPickerAction(background);
+		
+		// add action listener of font size
+		fontSizeAction(smallFont, mediumFont, largeFont);
+		
+		fontSpace(oneSpace, oneFiveSpace);
+		
+		fontAction(fontTimes, fontArial);
+		
+		// add action listener of listView
+		listViewAction(listView);
+		
+		wrapAction(wrap);
+	}
+	
+	private void fontAction(MenuItem fontTimes, MenuItem fontArial){
+		fontTimesAction(fontTimes);
+		fontArialAction(fontArial);
+	}
+	
+	private void fontArialAction(MenuItem fontArial){
+		fontArial.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				textArea.setFont(Font.font("Arial"));
+			}
+	    });
+	}
+	
+	private void fontTimesAction(MenuItem fontTimes){
+		fontTimes.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				textArea.setFont(Font.font("Times New Roman"));
+			}
+	    });
+	}
+	
+	/**
+	 * line wrap
+	 * @param wrap
+	 */
+	private void wrapAction(Button wrap){
+		wrap.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				textArea.setWrapText(wrapFlag);
+				wrapFlag = !wrapFlag;
+			}
+	    });
+	}
+	
+	private void fontSpace(MenuItem oneSpace, MenuItem oneFiveSpace){
+		oneSpaceAction(oneSpace);
+		oneFiveSpaceAction(oneFiveSpace);
+	}
+	
+	private void oneFiveSpaceAction(MenuItem oneFiveSpace){
+		oneFiveSpace.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				//fontSpace = 1;
+				//this.textArea.setText(FileUtils.printFile(file));
+				
+//				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
+//						"-fx-text-fill: " + fontColorString + ";" +
+//						"-fx-font-size: 16pt;" + );	
+				//System.out.println("1.5");
+	
+			}
+	    });
+	}
+	
+	private void oneSpaceAction(MenuItem oneSpace){
+		oneSpace.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				//fontSpace = 1;
+				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
+						"-fx-text-fill: " + fontColorString + ";" +
+						"-fx-font-size: 16pt;" + "-fx-stroke-width: 1;");	
+			}
+	    });
+	}
+	
+	/**
+	 * add action listener of listView
+	 * @param listView
+	 */
 	public void listViewAction(ListView<BookItem> listView){
 	    listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -98,7 +208,7 @@ public class ReaderOverviewController {
 	 * @param mediumFont
 	 * @param largeItem
 	 */
-	public void fontAction(MenuItem smallFont, MenuItem mediumFont, MenuItem largeItem){
+	public void fontSizeAction(MenuItem smallFont, MenuItem mediumFont, MenuItem largeItem){
 		smallFontAction(smallFont);
 		mediumFontAction(mediumFont);
 		largeFontAction(largeFont);

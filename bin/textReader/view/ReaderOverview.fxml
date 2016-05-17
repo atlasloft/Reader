@@ -9,16 +9,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="513.0" prefWidth="689.0" stylesheets="@theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="496.0" prefWidth="803.0" stylesheets="@theme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.2576419213973799" layoutX="24.0" layoutY="49.0" prefHeight="513.0" prefWidth="689.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.22763157894736843" layoutX="24.0" layoutY="49.0" prefHeight="513.0" prefWidth="689.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <children>
-                  <ListView fx:id="listView" layoutX="-6.0" layoutY="56.0" maxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ListView fx:id="listView" layoutX="-6.0" layoutY="56.0" maxWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -28,7 +28,7 @@
                            <children>
                               <TextArea fx:id="textArea" layoutX="45.0" layoutY="60.0" prefHeight="448.0" prefWidth="504.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children></AnchorPane>
-                      <AnchorPane maxHeight="153.0" minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="504.0">
+                      <AnchorPane maxHeight="50.0" minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="504.0">
                            <children>
                               <MenuButton layoutX="345.0" layoutY="13.0" mnemonicParsing="false" text="Size">
                                 <items>
@@ -37,13 +37,19 @@
                                     <MenuItem fx:id="largeFont" mnemonicParsing="false" text="large" />
                                 </items>
                               </MenuButton>
-                              <Button layoutX="422.0" layoutY="10.0" mnemonicParsing="false" text="Wrap" />
+                              <Button fx:id="wrap" layoutX="517.0" layoutY="10.0" mnemonicParsing="false" text="Wrap" />
                               <ColorPicker fx:id="fontColor" layoutX="141.0" layoutY="14.0" />
                               <ColorPicker fx:id="background" layoutX="21.0" layoutY="12.0" />
                               <MenuButton layoutX="252.0" layoutY="14.0" mnemonicParsing="false" text="Space">
                                 <items>
-                                  <MenuItem mnemonicParsing="false" text="1.0" />
-                                  <MenuItem mnemonicParsing="false" text="1.5" />
+                                  <MenuItem fx:id="oneSpace" mnemonicParsing="false" text="1.0" />
+                                  <MenuItem fx:id="oneFiveSpace" mnemonicParsing="false" text="1.5" />
+                                </items>
+                              </MenuButton>
+                              <MenuButton layoutX="427.0" layoutY="14.0" mnemonicParsing="false" text="Font">
+                                <items>
+                                  <MenuItem fx:id="fontTimes" mnemonicParsing="false" text="Times New Roman" />
+                                  <MenuItem fx:id="fontArial" mnemonicParsing="false" text="Arial" />
                                 </items>
                               </MenuButton>
                            </children>
