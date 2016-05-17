@@ -4,8 +4,12 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -21,6 +25,8 @@ public class MainApp extends Application {
     private BorderPane rootLayout;
     
     private ReaderOverviewController controllerReader;
+    
+    private AnchorPane readerOverview;
     
     @Override
     public void start(Stage primaryStage) {
@@ -64,7 +70,7 @@ public class MainApp extends Application {
      */
     public void showReaderOverview() {
         try {
-            // Load person overview.
+            // Load book overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/ReaderOverview.fxml"));
             
@@ -73,14 +79,24 @@ public class MainApp extends Application {
             // set the controller of rootLayout      
             loader.setController(controllerReader);
             
-            AnchorPane readerOverview = (AnchorPane) loader.load();
+            readerOverview = (AnchorPane) loader.load();
 
-            // Set person overview into the center of root layout.
-            rootLayout.setCenter(readerOverview);;
+            // Set book overview into the center of root layout.
+            rootLayout.setCenter(readerOverview);
+
             
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    
+    public void setReadMode(){
+    	this.controllerReader.setReadMode(rootLayout );
+    }
+    
+    public void setNormalMode(){
+    	rootLayout.setCenter(this.readerOverview);
     }
     
     /**

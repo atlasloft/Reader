@@ -43,7 +43,7 @@
                               <MenuButton layoutX="252.0" layoutY="14.0" mnemonicParsing="false" text="Space">
                                 <items>
                                   <MenuItem fx:id="oneSpace" mnemonicParsing="false" text="1.0" />
-                                  <MenuItem fx:id="oneFiveSpace" mnemonicParsing="false" text="1.5" />
+                                  <MenuItem fx:id="twoSpace" mnemonicParsing="false" text="2.0" />
                                 </items>
                               </MenuButton>
                               <MenuButton layoutX="427.0" layoutY="14.0" mnemonicParsing="false" text="Font">

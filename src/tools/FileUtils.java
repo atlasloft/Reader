@@ -62,6 +62,30 @@ public class FileUtils {
 	}
 	
 	/**
+	 * get the text file content in double space
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	public static String printDoubleSpaceFile(File file) throws IOException{
+		StringBuffer stringBuffer = new StringBuffer();		
+	    BufferedReader bufferedReader;
+	    
+		try {
+			bufferedReader = new BufferedReader(new FileReader(file));
+			for (String line; (line = bufferedReader.readLine()) != null;) {
+				stringBuffer.append(line);
+				stringBuffer.append("\n\n");
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return stringBuffer.toString();
+	}
+	
+	/**
 	 * operate textArea CSS
 	 * to change the background of textArea
 	 * @param color

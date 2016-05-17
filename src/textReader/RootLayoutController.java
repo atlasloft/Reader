@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -31,6 +32,12 @@ public class RootLayoutController {
 	@FXML
 	private MenuItem aboutReader;
 	
+	@FXML
+	private MenuItem readMode;
+	
+	@FXML
+	private MenuItem normalMode;
+	
 	private Stage stage;
 	private MainApp mainApp;
 
@@ -48,8 +55,40 @@ public class RootLayoutController {
 		
 		aboutAction(author, aboutReader);
 		
+		modeAction(readMode, normalMode);
+		
 	}
 	
+	private void modeAction(MenuItem readMode, MenuItem normalMode){
+		readModeAction(readMode);
+		normalModeAction(normalMode);
+	}
+	
+	private void normalModeAction(MenuItem normalMode){
+		normalMode.setOnAction(new EventHandler<ActionEvent>() {
+
+		    @Override 
+		    public void handle(ActionEvent e) {
+		    	mainApp.setNormalMode();
+		    }
+		});
+	}
+	
+	private void readModeAction(MenuItem readMode){
+		readMode.setOnAction(new EventHandler<ActionEvent>() {
+
+		    @Override 
+		    public void handle(ActionEvent e) {
+		    	mainApp.setReadMode();
+		    }
+		});
+	}
+	
+	/**
+	 * add action listener of about Reader & about author
+	 * @param author
+	 * @param aboutReader
+	 */
 	private void aboutAction(MenuItem author, MenuItem aboutReader){
 		authorAction(author);
 		aboutReaderAction(aboutReader);

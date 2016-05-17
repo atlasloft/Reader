@@ -17,8 +17,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import textReader.model.BookItem;
 import textReader.model.BookList;
 import textReader.model.BookListWrapper;
@@ -51,7 +55,7 @@ public class ReaderOverviewController {
 	private MenuItem oneSpace;
 	
 	@FXML
-	private MenuItem oneFiveSpace;
+	private MenuItem twoSpace;
 	
 	@FXML
 	private Button wrap;
@@ -67,6 +71,8 @@ public class ReaderOverviewController {
 	private BookList bookList = new BookList();
 	
 	private boolean wrapFlag = true;
+	
+	private File file ;
 	
 	//这四个的默认值问题需要修改！！！
 	//删除文件有问题
@@ -102,7 +108,7 @@ public class ReaderOverviewController {
 		// add action listener of font size
 		fontSizeAction(smallFont, mediumFont, largeFont);
 		
-		fontSpace(oneSpace, oneFiveSpace);
+		fontSpace(oneSpace, twoSpace);
 		
 		fontAction(fontTimes, fontArial);
 		
@@ -112,6 +118,11 @@ public class ReaderOverviewController {
 		wrapAction(wrap);
 	}
 	
+	/**
+	 * change the font when the menu is clicked
+	 * @param fontTimes
+	 * @param fontArial
+	 */
 	private void fontAction(MenuItem fontTimes, MenuItem fontArial){
 		fontTimesAction(fontTimes);
 		fontArialAction(fontArial);
@@ -152,23 +163,24 @@ public class ReaderOverviewController {
 	    });
 	}
 	
-	private void fontSpace(MenuItem oneSpace, MenuItem oneFiveSpace){
+	private void fontSpace(MenuItem oneSpace, MenuItem twoSpace){
 		oneSpaceAction(oneSpace);
-		oneFiveSpaceAction(oneFiveSpace);
+		twoSpaceAction(twoSpace);
 	}
 	
-	private void oneFiveSpaceAction(MenuItem oneFiveSpace){
-		oneFiveSpace.setOnAction(new EventHandler<ActionEvent>(){
+	private void twoSpaceAction(MenuItem twoSpace){
+		twoSpace.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
 			public void handle(ActionEvent event) {
-				//fontSpace = 1;
-				//this.textArea.setText(FileUtils.printFile(file));
-				
-//				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-//						"-fx-text-fill: " + fontColorString + ";" +
-//						"-fx-font-size: 16pt;" + );	
-				//System.out.println("1.5");
+				try {
+					
+					textArea.setText(FileUtils.printDoubleSpaceFile(file));
+					
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
 	
 			}
 	    });
@@ -179,16 +191,21 @@ public class ReaderOverviewController {
 
 			@Override
 			public void handle(ActionEvent event) {
-				//fontSpace = 1;
-				textArea.setStyle("-fx-control-inner-background: " +backgroundString  + ";"+
-						"-fx-text-fill: " + fontColorString + ";" +
-						"-fx-font-size: 16pt;" + "-fx-stroke-width: 1;");	
+				try {
+					
+					textArea.setText(FileUtils.printDoubleSpaceFile(file));
+					
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
+	
 			}
 	    });
 	}
 	
 	/**
-	 * add action listener of listView
+	 * add an action listener of listView
 	 * @param listView
 	 */
 	public void listViewAction(ListView<BookItem> listView){
@@ -203,7 +220,7 @@ public class ReaderOverviewController {
 	}
 	
 	/**
-	 * add action listener of font size
+	 * add an action listener of font size
 	 * @param smallFont
 	 * @param mediumFont
 	 * @param largeItem
@@ -309,6 +326,7 @@ public class ReaderOverviewController {
 		try {
 			
 			this.textArea.setText(FileUtils.printFile(file));
+			this.file = file;
 			
 		} catch (IOException e1) {
 			
@@ -379,6 +397,7 @@ public class ReaderOverviewController {
 	private int to255Int(double d) {
 		return (int) (d * 255);
 	}
+	
 
 	/**
 	 * Loads book data from the "src/textReader/model/books.xml". The current book data will
@@ -429,5 +448,16 @@ public class ReaderOverviewController {
 	    	e.printStackTrace();
 	    }
 	}
+
+	/**
+	 * set read mode: 
+	 * full screen of TextArea
+	 * @param rootLayout
+	 */
+	public void setReadMode(BorderPane rootLayout) {
+		rootLayout.setCenter(textArea);
+		
+	}
+	
 	
 }
